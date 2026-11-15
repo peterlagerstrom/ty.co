@@ -1,0 +1,42 @@
+name: Deploy to App Engine
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # för keyless-inloggning mot Google Cloud
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://tetzy.com
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          # Inga secrets: dessa värden är publika identifierare.
+          # Skapas av scripts/setup-github-deploy.sh.
+          workload_identity_provider: projects/194319898358/locations/global/workloadIdentityPools/github/providers/ty-co
+          service_account: github-deploy@tyco-1286.iam.gserviceaccount.com
+
+      - id: deploy
+        uses: google-github-actions/deploy-appengine@54d5fc7167ec790eb0233905e3cef384221b4619 # v3.0.1
+        with:
+          project_id: tyco-1286
+          deliverables: app.yaml
+          promote: true
+
+      - name: Smoke test
+        run: curl --fail --silent --show-error --output /dev/null "${{ steps.deploy.outputs.version_url }}"
