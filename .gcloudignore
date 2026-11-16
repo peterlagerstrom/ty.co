@@ -13,7 +13,6 @@
 .git
 .gitignore
 .github/
-scripts/
 *.md
 
 # Node.js dependencies:

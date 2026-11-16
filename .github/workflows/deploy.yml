@@ -27,7 +27,6 @@ jobs:
       - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
         with:
           # Inga secrets: dessa värden är publika identifierare.
-          # Skapas av scripts/setup-github-deploy.sh.
           workload_identity_provider: projects/194319898358/locations/global/workloadIdentityPools/github/providers/ty-co
           service_account: github-deploy@tyco-1286.iam.gserviceaccount.com
 
