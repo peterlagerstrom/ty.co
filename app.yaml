@@ -99,6 +99,20 @@ handlers:
     X-Content-Type-Options: 'nosniff'
     Strict-Transport-Security: max-age=31536000; includeSubDomains
 
+- url: /tickyclock/privacy/?
+  static_files: tickyclock/privacy/index.html
+  upload: tickyclock/privacy/index\.html
+  expiration: "1d"
+  secure: always
+  redirect_http_response_code: 301
+  http_headers:
+    Content-Security-Policy: script-src 'self'
+    Referrer-Policy: no-referrer-when-downgrade
+    Permissions-Policy: sync-xhr=(), camera=(), microphone=()
+    X-Frame-Options: 'SAMEORIGIN'
+    X-Content-Type-Options: 'nosniff'
+    Strict-Transport-Security: max-age=31536000; includeSubDomains
+
 - url: /.*
   static_files: index.html
   upload: index\.html
